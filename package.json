@@ -1,0 +1,37 @@
+{
+  "name": "erne75",
+  "version": "0.1.0",
+  "description": "Sails js installable hook that implements User authentication",
+  "main": "index.js",
+  "sails": {
+    "isHook": true
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecabello/sails-userlogin.git"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.1.0",
+    "lodash": "^3.8.0",
+    "passport": "~0.1.16",
+    "passport-facebook": "^1.0.3",
+    "passport-github": "^0.1.5",
+    "passport-google-oauth": "^0.1.5",
+    "passport-local": "~0.1.6",
+    "passport-twitter": "^1.0.2"
+  },
+  "keywords": [
+    "sails",
+    "user",
+    "authetication"
+  ],
+  "author": "Ernesto Cabello <erneridesbmx@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ecabello/sails-hook-userlogin/issues"
+  },
+  "homepage": "https://github.com/ecabello/sails-hook-userlogin"
+}
