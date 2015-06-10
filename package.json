@@ -1,5 +1,5 @@
 {
-  "name": "erne75",
+  "name": "sails-hook-userlogin",
   "version": "0.1.0",
   "description": "Sails js installable hook that implements User authentication",
   "main": "index.js",
