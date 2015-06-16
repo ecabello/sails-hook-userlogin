@@ -37,6 +37,7 @@ userlogin.js file under your sails config directory.
 For example to configure login for google and twitter social networks the config
 would look like this.
 
+```javascript
 module.exports.userlogin = {  
     google: {  
     clientID: 'YOUR-GOOGLE-CLIENTID',  
@@ -49,17 +50,22 @@ module.exports.userlogin = {
     callbackURL: "https//localhost:1337/twitter/return"  
   }  
 };  
+```
 
 The user model name can be changed by using the 'userModel' setting.
 
+```javascript
 module.exports.userlogin = {  
   userModel: 'Customer'  
 };
+```
 
 The Hook will check is the model exists. If it doesnt, the Hook will inject it.
 
 Local login functionality can be suppressed by setting local to false.
 
+```javascript
 module.exports.userlogin = {  
   local: false  
 };
+```
