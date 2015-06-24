@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-userlogin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sails js installable hook that implements User authentication",
   "main": "index.js",
   "sails": {

@@ -2,6 +2,7 @@ var _ = require('lodash'),
     authenticate = require('./lib/authenticate'),
     injectModel = require('./lib/injectmodel'),
     Waterline = require('sails/node_modules/waterline'),
+    _addResViewMethod = require('sails/lib/hooks/views/res.view.js'),
     $LOGIN_REDIRECT_URL$ = '$loginRedirectUrl$';
 
 module.exports = function userlogin(sails) {
@@ -13,7 +14,7 @@ module.exports = function userlogin(sails) {
             loginCallback: function(err, user, provider, req, res) {
                 if (err || !user) {
                     sails.log.info(provider + ' authentication failed');
-                    return res.notFound('No user found');
+                    return res.forbidden('Authentication failed');
                 }
                 req.logIn(user, function (err) {
                     if (err)
@@ -25,6 +26,29 @@ module.exports = function userlogin(sails) {
                     sails.log.info('redirecting to ' + url + '...')
                     return url ? res.redirect(url) : res.ok();
                 });
+            },
+            updateSocialProfile: function(user, profile, callback) {
+                // user.XXXId (e.g. googleId, facebookId, etc...)
+                var providerIdKey = profile.provider + 'Id';
+                if (!(providerIdKey in user))
+                    user[providerIdKey] = profile.id;
+                // user.displayName
+                if (!user.displayName)
+                    user.displayName = profile.displayName;
+                // user.email
+                if (!user.email && profile.emails && profile.emails[0] && profile.emails[0].value)
+                    user.email = profile.emails[0].value;
+                // user.firstName
+                if (!user.firstName) {
+                    if (profile.name && profile.name.givenName)
+                        user.firstName = profile.name.givenName;
+                }
+                // user.lastName
+                if (!user.lastName) {
+                    if (profile.name && profile.name.familyName)
+                        user.lastName = profile.name.familyName;
+                }
+                return callback(null, user);
             }
         },
 
@@ -161,10 +185,11 @@ module.exports = function userlogin(sails) {
         },
 
         loggedUser: function(req, res) {
-          if (req.isAuthenticated())
-              return res.json(req.user);
-
-          return res.notFound('No user logged in');
+            if (req.isAuthenticated())
+                return res.json(req.user);
+            return _addResViewMethod(req, res, function () {
+                return res.notFound('No user logged in');
+            });
         },
 
         logout: function(req, res) {

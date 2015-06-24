@@ -22,6 +22,7 @@ The Hook intalls and handle the following routes
 * /twitter/*
 * /facebook/*
 * /github/*
+* /loggeduser
 * /logout
 
 
@@ -39,7 +40,7 @@ would look like this.
 
 ```javascript
 module.exports.userlogin = {  
-    google: {  
+  google: {  
     clientID: 'YOUR-GOOGLE-CLIENTID',  
     clientSecret: 'PdgdRaq8VJC6EZjS5-Epf9RF',  
     callbackURL: 'http://localhost:1337/google/return'  
@@ -69,3 +70,11 @@ module.exports.userlogin = {
   local: false  
 };
 ```
+
+When attempting login a parameter 'redirecturl' can be passed to redirect to
+the desired location upon a successful login. By default it would redirect to the
+root if no redirect url is provided. If the login is unsuccessful a HTTP 403
+(Forbidden) is returned, HTTP 200 otherwise.
+
+
+http://localhost:1337/google/login?redirecturl=http//www.google.com
