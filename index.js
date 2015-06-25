@@ -35,19 +35,31 @@ module.exports = function userlogin(sails) {
                 // user.displayName
                 if (!user.displayName)
                     user.displayName = profile.displayName;
+
+                if (profile.name) {
+                    // user.lastName
+                    if (!user.lastName) {
+                        if (profile.name.familyName)
+                            user.lastName = profile.name.familyName;
+                    }
+                    // user.firstName
+                    if (!user.firstName) {
+                        if (profile.name.givenName)
+                            user.firstName = profile.name.givenName;
+                    }
+                    // user.middle_name
+                    if (!user.middleName) {
+                        if (profile.name.middleName)
+                            user.middleName = profile.name.middleName;
+                    }
+                }
                 // user.email
                 if (!user.email && profile.emails && profile.emails[0] && profile.emails[0].value)
                     user.email = profile.emails[0].value;
-                // user.firstName
-                if (!user.firstName) {
-                    if (profile.name && profile.name.givenName)
-                        user.firstName = profile.name.givenName;
-                }
-                // user.lastName
-                if (!user.lastName) {
-                    if (profile.name && profile.name.familyName)
-                        user.lastName = profile.name.familyName;
-                }
+                // user.photo
+                if (!user.photo && profile.photos && profile.photos[0] && profile.photos[0].value)
+                    user.photo = profile.photos[0].value;
+
                 return callback(null, user);
             }
         },
@@ -161,7 +173,8 @@ module.exports = function userlogin(sails) {
         googleLogin: function(req, res, next) {
             this.processRedirectUrl(req, res);
             this.authenticate(req, res, 'google', {
-                scope: ['https://www.googleapis.com/auth/plus.login', 'email']
+                scope: ['https://www.googleapis.com/auth/plus.login', 'email',
+                'https://www.googleapis.com/auth/userinfo.profile']
             }, sails.config.userlogin.loginCallback, next);
         },
 
@@ -175,6 +188,7 @@ module.exports = function userlogin(sails) {
         twitterLogin: function(req, res, next) {
             this.processRedirectUrl(req, res);
             this.authenticate(req, res, 'twitter', {
+                scope: ['email']
             }, sails.config.userlogin.loginCallback, next);
         },
 

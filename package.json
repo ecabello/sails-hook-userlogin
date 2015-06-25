@@ -1,28 +1,26 @@
 {
   "name": "sails-hook-userlogin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Sails js installable hook that implements User authentication",
   "main": "index.js",
   "sails": {
     "isHook": true
   },
-  "scripts": {
-
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/ecabello/sails-userlogin.git"
   },
   "dependencies": {
-    "async": "^0.9.0",
+    "async": "^0.9.2",
     "bcryptjs": "^2.1.0",
-    "lodash": "^3.8.0",
-    "passport": "~0.1.16",
-    "passport-facebook": "^1.0.3",
+    "lodash": "^3.9.3",
+    "passport": "^0.2.2",
+    "passport-facebook": "^2.0.0",
     "passport-github": "^0.1.5",
-    "passport-google-oauth": "^0.1.5",
-    "passport-local": "~0.1.6",
-    "passport-twitter": "^1.0.2"
+    "passport-google-oauth": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.3"
   },
   "devDependencies": {
     "sails": "~0.11.0"
@@ -32,10 +30,19 @@
     "user",
     "authentication"
   ],
-  "author": "Ernesto Cabello <erneridesbmx@gmail.com>",
+  "author": {
+    "name": "Ernesto Cabello",
+    "email": "erneridesbmx@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ecabello/sails-hook-userlogin/issues"
   },
-  "homepage": "https://github.com/ecabello/sails-hook-userlogin"
+  "homepage": "https://github.com/ecabello/sails-hook-userlogin",
+  "gitHead": "e10c3861e9f1d7adb364785619c883497a7004f8",
+  "readme": "# sails-hook-userlogin\r\n\r\nBasic User login functionality hook for sails.\r\n\r\nIt uses passports and a variety of Passport Strategies to allow login using several Social networks\r\n\r\n# Passport Strategies\r\n\r\n* Local\r\n* Google\r\n* Twitter\r\n* Facebook\r\n* Github\r\n\r\n\r\n# Routes\r\n\r\nThe Hook intalls and handle the following routes\r\n\r\n* POST /login\r\n* /google/*\r\n* /twitter/*\r\n* /facebook/*\r\n* /github/*\r\n* /loggeduser\r\n* /logout\r\n\r\n\r\n# Configuration\r\n\r\nBy default the Hook will provide local Strategy login. It would use a user model\r\ncalled User and the default login callback will send a json representation of\r\nthe user upon success.\r\n\r\nAll these can be changed and Social Network login can be enabled by adding a\r\nuserlogin.js file under your sails config directory.\r\n\r\nFor example to configure login for google and twitter social networks the config\r\nwould look like this.\r\n\r\n```javascript\r\nmodule.exports.userlogin = {  \r\n  google: {  \r\n    clientID: 'YOUR-GOOGLE-CLIENTID',  \r\n    clientSecret: 'PdgdRaq8VJC6EZjS5-Epf9RF',  \r\n    callbackURL: 'http://localhost:1337/google/return'  \r\n  },  \r\n  twitter: {  \r\n    clientID: 'YOUR-TWITTER-CONSUMER-KEY',  \r\n    clientSecret: 'YOUR-TWITTER-CONSUMER_SECRET',  \r\n    callbackURL: \"https//localhost:1337/twitter/return\"  \r\n  }  \r\n};  \r\n```\r\n\r\nThe user model name can be changed by using the 'userModel' setting.\r\n\r\n```javascript\r\nmodule.exports.userlogin = {  \r\n  userModel: 'Customer'  \r\n};\r\n```\r\n\r\nThe Hook will check is the model exists. If it doesnt, the Hook will inject it.\r\n\r\nLocal login functionality can be suppressed by setting local to false.\r\n\r\n```javascript\r\nmodule.exports.userlogin = {  \r\n  local: false  \r\n};\r\n```\r\n\r\nWhen attempting login a parameter 'redirecturl' can be passed to redirect to\r\nthe desired location upon a successful login. By default it would redirect to the\r\nroot if no redirect url is provided. If the login is unsuccessful a HTTP 403\r\n(Forbidden) is returned, HTTP 200 otherwise.\r\n\r\n\r\nhttp://localhost:1337/google/login?redirecturl=http//www.google.com\r\n",
+  "readmeFilename": "README.md",
+  "_id": "sails-hook-userlogin@1.0.1",
+  "_shasum": "23068fe259ecf4ec090e2b608b4dc9c3b8656235",
+  "_from": "sails-hook-userlogin@1.0.1"
 }
