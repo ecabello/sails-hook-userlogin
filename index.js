@@ -2,7 +2,7 @@ var _ = require('lodash'),
     authenticate = require('./lib/authenticate'),
     injectModel = require('./lib/injectmodel'),
     Waterline = require('sails/node_modules/waterline'),
-    _addResViewMethod = require('sails/lib/hooks/views/res.view.js'),
+    enhanceResponse = require('sails/lib/hooks/views/res.view.js'),
     $LOGIN_REDIRECT_URL$ = '$loginRedirectUrl$';
 
 module.exports = function userlogin(sails) {
@@ -11,10 +11,15 @@ module.exports = function userlogin(sails) {
         __configKey__: {
             local: true,
             userModel: 'User',
+            canUserLogin: function(user) {
+                return true;
+            },
             loginCallback: function(err, user, provider, req, res) {
                 if (err || !user) {
                     sails.log.info(provider + ' authentication failed');
-                    return res.forbidden('Authentication failed');
+                    return enhanceResponse(req, res, function() {
+                        return res.forbidden('Authentication failed');
+                    });
                 }
                 req.logIn(user, function (err) {
                     if (err)
@@ -24,7 +29,7 @@ module.exports = function userlogin(sails) {
                     if (!url)
                         url = '/';
                     sails.log.info('redirecting to ' + url + '...')
-                    return url ? res.redirect(url) : res.ok();
+                    return url ? res.redirect(url) : res.send(200);
                 });
             },
             updateSocialProfile: function(user, profile, callback) {
@@ -47,7 +52,7 @@ module.exports = function userlogin(sails) {
                         if (profile.name.givenName)
                             user.firstName = profile.name.givenName;
                     }
-                    // user.middle_name
+                    // user.middleName
                     if (!user.middleName) {
                         if (profile.name.middleName)
                             user.middleName = profile.name.middleName;
@@ -142,7 +147,7 @@ module.exports = function userlogin(sails) {
                             });
                         }
                         else
-                          cb(null, user);
+                            cb(null, user);
                     }
                 };
                 sails.log.info('injecting ' + userModel.globalId + ' model');
@@ -162,7 +167,7 @@ module.exports = function userlogin(sails) {
         processRedirectUrl: function(req, res) {
             var redirectUrl = req.param('redirecturl');
             if (redirectUrl)
-              req.session[$LOGIN_REDIRECT_URL$] = redirectUrl;
+                req.session[$LOGIN_REDIRECT_URL$] = redirectUrl;
         },
 
         localLogin: function(req, res, next) {
@@ -201,7 +206,7 @@ module.exports = function userlogin(sails) {
         loggedUser: function(req, res) {
             if (req.isAuthenticated())
                 return res.json(req.user);
-            return _addResViewMethod(req, res, function () {
+            return enhanceResponse(req, res, function () {
                 return res.notFound('No user logged in');
             });
         },
